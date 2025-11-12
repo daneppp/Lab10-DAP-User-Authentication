@@ -57,7 +57,8 @@ class _AddCluanWidgetState extends State<AddCluanWidget> {
   //Displays the textfields for the clue and answer and the add cluan, clear textfields, and test addition buttons
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Scaffold(appBar: AppBar(title: const Text('Add a New Cluan')),
+    body: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
@@ -97,6 +98,7 @@ class _AddCluanWidgetState extends State<AddCluanWidget> {
           ),
         ],
       ),
+    ),
     );
   }
 }

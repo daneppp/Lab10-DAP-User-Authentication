@@ -4,6 +4,7 @@ import 'Cluans/cluans_model.dart';
 import 'Cluans/cluans_widget.dart';
 import 'Cluans/add_cluan.dart';
 import 'Cluans/statistics.dart';
+import 'Cluans/'my_cluans_widget.dart';
 import 'UserAuth/login_screen.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -83,7 +84,7 @@ class _MainAppState extends State<MainApp> {
 
   final List<Widget> screens = const [
     CluansWidget(),
-    AddCluanWidget(),
+    MyCluansWidget(),
     StatisticsWidget(),
   ];
 
@@ -113,6 +114,15 @@ class _MainAppState extends State<MainApp> {
           },
         ),
       ];
+    } else if (selectedIndex == 1) {
+      appBarActions = [
+        IconButton(icon: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddCluanWidget()),
+        );
+        },
+        ),
+      ];
     } else {
       appBarActions = null;
     }
@@ -120,18 +130,18 @@ class _MainAppState extends State<MainApp> {
     //Sets up the bottom nav bar
     return Scaffold(
       appBar: AppBar(
-        title: Text(['Cluans', 'Add Cluan', 'Statistics'][selectedIndex]),
+        title: Text(['Cluans', 'My Cluans', 'Statistics'][selectedIndex]),
         actions: appBarActions,
       ),
       body: screens[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: onTap,
-        selectedItemColor: const Color.fromARGB(255, 24, 3, 80),
-        unselectedItemColor: Color.fromARGB(58, 163, 9, 58),
+        selectedItemColor: const Color.fromARGB(255, 232, 8, 8),
+        unselectedItemColor: Color.fromARGB(172, 238, 6, 80),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Cluans'),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Cluan'),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'My Cluans'),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats'),
         ],
       ),

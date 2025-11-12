@@ -16,14 +16,14 @@ class Cluans {
   final String answer;
   final DateTime date;
   final dynamic id;
+  final dynamic userId;
 
   //Constructor with one optional named param: date
   //and two required named parameters: clue and answer
-  Cluans({DateTime? date, required String clue, required String answer})
+  Cluans({DateTime? date, required String clue, required String answer, this.id, this.userId})
     : clue = clue.length > 150 ? clue.substring(0, 150) : clue,
       answer = answer.length > 21 ? answer.substring(0, 21) : answer,
-      date = date ?? DateTime.now(),
-      id = null;
+      date = date ?? DateTime.now();
       //added id field
 
   //Getters for answer and clue
@@ -37,6 +37,8 @@ class Cluans {
       answer: row['answer'],
       clue: row['clue'],
       date: DateTime.parse(row['created_at']),
+      id: row['id'].toString(),
+      userId: row['user_id'].toString(),
     );
   }
 
