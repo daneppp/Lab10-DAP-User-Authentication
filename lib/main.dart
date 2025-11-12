@@ -1,20 +1,23 @@
-// ignore_for_file: slash_for_doc_comments
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'cluans_model.dart';
-import 'cluans_widget.dart';
-import 'add_cluan.dart';
-import 'statistics.dart';
+import 'Cluans/cluans_model.dart';
+import 'Cluans/cluans_widget.dart';
+import 'Cluans/add_cluan.dart';
+import 'Cluans/statistics.dart';
+import 'Cluans/my_cluans_widget.dart';
+import 'UserAuth/login_screen.dart';
+import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 /**
  * Name: Dane Patzlaff
- * Date: 11/4/25
- * Description: Integrated Supabase with Cluan Tabbed application
+ * Date: 11/11/25
+ * Description: Cluans now requires users to sign in with a valid email before 
+ * accessing their app. App now contains 3 different tabs, Cluans, MyCluans, and Statistics.
+ * Cluans displays all users Cluans while MyCluans only displays the user's cluans.
+ * 
  * Known Bugs: None known
- * Reflection: Debugging the supabase connections took some time, and I had to
- * rework my widget tree a bit, but the content is displaying properly, and didn't have
- * to deviate too much from famous painters to do so. Overall pleased
+ * Reflection: 
  */
 
 void main() async {
@@ -26,14 +29,47 @@ void main() async {
 
   await Supabase.initialize(url: supaCluanURL, anonKey: supaAnonKey);
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => CluansModel(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: const MainApp(),
-      ),
-    ),
+    const MaterialApp(debugShowCheckedModeBanner: false, home: AuthGate()),
   );
+}
+
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    SupabaseClient supabaseClient = Supabase.instance.client;
+
+    return StreamBuilder<AuthState>( //Build once the user authorization is fulfilled
+      stream: supabaseClient.auth.onAuthStateChange,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        //Check to see if the current session's data isn't null
+        final Session? isActiveSession;
+        if (snapshot.hasData) {
+          isActiveSession = snapshot.data!.session;
+        } else {
+          isActiveSession = null;
+        }
+
+        //If the session isn't null, then navigate to the MainApp. 
+        //Otherwise, session isn't authenticated and user must logged in
+        if (isActiveSession != null) {
+          return ChangeNotifierProvider(
+            create: (_) => CluansModel(),
+            child: const MainApp(),
+          );
+        } else {
+          return const LoginScreen();
+        }
+      },
+    );
+  }
 }
 
 class MainApp extends StatefulWidget {
@@ -48,7 +84,7 @@ class _MainAppState extends State<MainApp> {
 
   final List<Widget> screens = const [
     CluansWidget(),
-    AddCluanWidget(),
+    MyCluansWidget(),
     StatisticsWidget(),
   ];
 
@@ -78,31 +114,37 @@ class _MainAppState extends State<MainApp> {
           },
         ),
       ];
+    } else if (selectedIndex == 1) {
+      appBarActions = [
+        IconButton(icon: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const AddCluanWidget()),
+        );
+        },
+        ),
+      ];
     } else {
       appBarActions = null;
     }
 
     //Sets up the bottom nav bar
     return Scaffold(
-        appBar: AppBar(
-          title: Text(['Cluans', 'Add Cluan', 'Statistics'][selectedIndex]),
-          actions: appBarActions,
-        ),
-        body: screens[selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: onTap,
-          selectedItemColor: const Color.fromARGB(255, 24, 3, 80),
-          unselectedItemColor: Color.fromARGB(58, 163, 9, 58),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Cluans'),
-            BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Cluan'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart),
-              label: 'Stats',
-            ),
-          ],
-        ),
-      );
+      appBar: AppBar(
+        title: Text(['Cluans', 'My Cluans', 'Statistics'][selectedIndex]),
+        actions: appBarActions,
+      ),
+      body: screens[selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: onTap,
+        selectedItemColor: const Color.fromARGB(255, 232, 8, 8),
+        unselectedItemColor: Color.fromARGB(172, 238, 6, 80),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Cluans'),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'My Cluans'),
+          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats'),
+        ],
+      ),
+    );
   }
 }

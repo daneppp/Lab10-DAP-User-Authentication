@@ -45,12 +45,20 @@ class CluansModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Cluans> getMyCluans() {
+    final curUserId = client.auth.currentUser?.id;
+    if(curUserId == null) {
+      return [];
+    }
+    return cluansList.where((c) => c.userId == curUserId).toList();
+  }
+
   void removeCluan(Cluans trashyCluan) async {
     await client
     .from('cluans')
     .delete()
-    .eq('ID', trashyCluan.id);
-  getAllCluans();
+    .eq('id', trashyCluan.id);
+    getAllCluans();
   }
   
   /**

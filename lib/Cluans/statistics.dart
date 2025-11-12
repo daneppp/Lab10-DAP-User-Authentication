@@ -11,7 +11,6 @@ import 'cluans_model.dart';
  * Reflection: Not too bad
  */
 
-
 class StatisticsWidget extends StatelessWidget {
   const StatisticsWidget({super.key});
 
@@ -38,15 +37,22 @@ class StatisticsWidget extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16), //Display all stats rounded to 1 decimal place 
-          Text('Minimum answer length: ${min.toStringAsFixed(1)}'),
-          Text('Maximum answer length: ${max.toStringAsFixed(1)}'),
-          Text('Average answer length: ${mean.toStringAsFixed(1)}'),
-          Text('Sample standard deviation: ${sd.toStringAsFixed(1)}'),
-        ],
+      child: DefaultTextStyle(
+        // FIXED: Added closing parenthesis ')' after the color
+        style: const TextStyle(
+          fontSize: 24.0,
+          color: Color.fromARGB(255, 6, 102, 181),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 24),
+            Text('Minimum answer length: ${min.toStringAsFixed(1)}'),
+            Text('Maximum answer length: ${max.toStringAsFixed(1)}'),
+            Text('Average answer length: ${mean.toStringAsFixed(1)}'),
+            Text('Sample standard deviation: ${sd.toStringAsFixed(1)}'),
+          ],
+        ),
       ),
     );
   }
