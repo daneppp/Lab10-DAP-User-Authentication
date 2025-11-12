@@ -2,19 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'cluans_model.dart';
-import 'cluans_widget.dart';
-import 'add_cluan.dart';
-import 'statistics.dart';
+import 'Cluans/cluans_model.dart';
+import 'Cluans/cluans_widget.dart';
+import 'Cluans/add_cluan.dart';
+import 'Cluans/statistics.dart';
+
+//simplify import statements by just importing the folders
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 /**
  * Name: Dane Patzlaff
- * Date: 11/4/25
- * Description: Integrated Supabase with Cluan Tabbed application
+ * Date: 11/11/25
+ * Description: Cluans now requires users to sign in with a valid email before 
+ * accessing their app. App now contains 3 different tabs, Cluans, MyCluans, and Statistics.
+ * Cluans displays all users Cluans while MyCluans only displays the user's cluans.
+ * 
  * Known Bugs: None known
- * Reflection: Debugging the supabase connections took some time, and I had to
- * rework my widget tree a bit, but the content is displaying properly, and didn't have
- * to deviate too much from famous painters to do so. Overall pleased
+ * Reflection: 
  */
 
 void main() async {

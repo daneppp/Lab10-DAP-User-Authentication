@@ -12,6 +12,8 @@ dependencies:
   provider: ^6.1.5+1
   stats: ^3.0.0
   supabase_flutter: ^2.10.3
+  google_sign_in: ^6.2.1
+  supabase_auth_ui: ^0.5.5
 
 dev_dependencies:
   flutter_test:
