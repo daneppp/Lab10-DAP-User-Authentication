@@ -4,7 +4,7 @@ import 'Cluans/cluans_model.dart';
 import 'Cluans/cluans_widget.dart';
 import 'Cluans/add_cluan.dart';
 import 'Cluans/statistics.dart';
-import 'Cluans/'my_cluans_widget.dart';
+import 'Cluans/my_cluans_widget.dart';
 import 'UserAuth/login_screen.dart';
 import 'package:supabase_auth_ui/supabase_auth_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

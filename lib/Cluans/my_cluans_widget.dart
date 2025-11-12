@@ -28,8 +28,8 @@ class MyCluansWidget extends StatelessWidget {
     //Calling watch on the model to display the Cluans in the ListView
     final model = context.watch<CluansModel>();
 
-    final myCluans = model.myCluans;
-    
+    final myCluans = model.getMyCluans();
+
     return ListView.builder(
       itemCount: myCluans.length,
       itemBuilder: (context, index) {
@@ -39,11 +39,11 @@ class MyCluansWidget extends StatelessWidget {
         return ListTile(
           onLongPress: () {
             model.removeCluan(cluan);
-          
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Cluan has been deleted')),
-          );
-      }
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Cluan has been deleted')),
+            );
+          },
           title: Text(cluan.clue),
           subtitle: Text(cluan.answer.toUpperCase()),
           trailing: Text(
